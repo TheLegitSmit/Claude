@@ -6,8 +6,6 @@ import { readStreamableValue } from 'ai/rsc';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { ReactMarkdownProps } from 'react-markdown/lib/ast-to-react';
-
 
 // Force the page to be dynamic and allow streaming responses up to 30 seconds
 export const dynamic = 'force-dynamic';
@@ -43,7 +41,6 @@ export default function Home() {
 
     for await (const delta of readStreamableValue(newMessage)) {
       textContent = `${textContent}${delta}`;
-
       setConversation([
         ...messages,
         { role: 'assistant', content: textContent },
@@ -87,7 +84,7 @@ export default function Home() {
                     className,
                     children,
                     ...props
-                  }: ReactMarkdownProps['components']['code'] & { children: React.ReactNode[] }) {
+                  }) {
                     const match = /language-(\w+)/.exec(className || '');
                     return !inline && match ? (
                       <SyntaxHighlighter

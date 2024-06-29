@@ -11,6 +11,13 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
+interface CodeProps {
+  node?: any;
+  inline?: boolean;
+  className?: string;
+  children: React.ReactNode;
+}
+
 export default function Home() {
   const [conversation, setConversation] = useState<Message[]>([]);
   const [input, setInput] = useState<string>('');
@@ -72,19 +79,13 @@ export default function Home() {
               style={{
                 ...styles.messageBubble,
                 backgroundColor: message.role === 'user' ? '#DCF8C6' : '#EAEAEA',
-                color: message.role === 'user' ? '#000' : '#000',
+                color: '#000',
               }}
             >
               <strong>{message.role === 'user' ? 'You' : 'Assistant'}:</strong>{' '}
               <ReactMarkdown
                 components={{
-                  code({
-                    node,
-                    inline,
-                    className,
-                    children,
-                    ...props
-                  }) {
+                  code: ({ node, inline, className, children, ...props }: CodeProps) => {
                     const match = /language-(\w+)/.exec(className || '');
                     return !inline && match ? (
                       <SyntaxHighlighter
@@ -115,7 +116,7 @@ export default function Home() {
           type="text"
           value={input}
           ref={inputRef}
-          onChange={event => {
+          onChange={(event) => {
             setInput(event.target.value);
           }}
           onKeyPress={handleKeyPress}
@@ -129,10 +130,10 @@ export default function Home() {
   );
 }
 
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
   container: {
     display: 'flex',
-    flexDirection: 'column' as 'column',
+    flexDirection: 'column',
     height: '100vh',
     padding: '10px',
     backgroundColor: '#121212',
@@ -140,7 +141,7 @@ const styles = {
   },
   chatContainer: {
     flex: 1,
-    overflowY: 'auto' as 'auto',
+    overflowY: 'auto',
     marginBottom: '10px',
     padding: '10px',
   },
@@ -153,7 +154,7 @@ const styles = {
     padding: '10px',
     borderRadius: '10px',
     boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
-    overflowX: 'auto' as 'auto',
+    overflowX: 'auto',
   },
   inputContainer: {
     display: 'flex',
